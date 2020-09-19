@@ -33,10 +33,12 @@ public class GovernmentDataDAO {
 		st.setString(7, govtData.getUserId());
 		
 		st.executeUpdate();
+		System.out.println("Data successfully Inserted");
 		con.getConnection().close();
 	}
 
 	public void display() throws ClassNotFoundException, SQLException, IOException {
+		boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
@@ -47,8 +49,16 @@ public class GovernmentDataDAO {
 		{
 			System.out.println(rs.getString("GID") + "\t\t\t" + rs.getString("ID_TYPE") + "\t\t\t" + rs.getString("CARD_NUMBER") + "\t\t\t" + rs.getString("FATHER_NAME")
 			 + "\t\t\t" + rs.getDate("VALIDITY") + "\t\t\t" + rs.getString("ISSUER") + "\t\t\t" + rs.getString("USER_ID"));
+		
+			flag = true;
 		}
 		System.out.println("******************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 
 	}
 
@@ -66,6 +76,7 @@ public class GovernmentDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+			con.getConnection().close();
 
 	}
 
@@ -83,6 +94,7 @@ public class GovernmentDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -100,6 +112,7 @@ public class GovernmentDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -117,6 +130,7 @@ public class GovernmentDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -133,7 +147,74 @@ public class GovernmentDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
+	}
 
+	public void userGovernment() throws ClassNotFoundException, SQLException, IOException {
+		boolean flag = false;
+		
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM USER_DETAILS INNER JOIN GOVERMENT_DATA ON USER_DETAILS.ID = GOVERMENT_DATA.USER_ID";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************\n\n");
+		while(rs.next())
+		{
+			System.out.println(rs.getString("ID") + "\t\t" + rs.getString("FNAME") + "\t\t" + rs.getString("LNAME") + "\t\t" + rs.getString("USERNAME")
+			+"\t\t"+rs.getString("PASSWORD") + "\t\t" + rs.getDate("DATE_OF_BIRTH") + "\t\t" + rs.getLong("MOBILE_NUM") + "\t\t" + rs.getString("EMAIL_ID")
+			+"\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE") +
+			rs.getString("GID") + "\t\t\t" + rs.getString("ID_TYPE") + "\t\t\t" + rs.getString("CARD_NUMBER") + "\t\t\t" + rs.getString("FATHER_NAME")
+			 + "\t\t\t" + rs.getDate("VALIDITY") + "\t\t\t" + rs.getString("ISSUER") + "\t\t\t" + rs.getString("USER_ID"));
+		
+			flag = true;
+		}
+		System.out.println("*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************\n\n");
+
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
+	}
+
+	public void countGovtData() throws ClassNotFoundException, SQLException, IOException {
+		Statement st = con.getConnection().createStatement();
+		ResultSet rs = st.executeQuery("SELECT COUNT(GID) FROM GOVERMENT_DATA");
+		while(rs.next())
+		{
+			int count = rs.getInt(1);
+			System.out.println("\n*************************************************************************************\n");
+			System.out.println("The total Government data inserted  are :" + count);
+			System.out.println("\n*************************************************************************************\n");
+
+		}
+		con.getConnection().close();
+
+	}
+
+	public void displayUserGovt(String uid) throws ClassNotFoundException, SQLException, IOException {
+		
+		boolean flag = false;
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM GOVERMENT_DATA WHERE USER_ID = '" + uid + "'";
+	//	String sql = "SELECT ID FROM USER_DETAILS";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("******************************************************************************************************************************************************************************************************************");
+		System.out.println("Government ID\t\tID Type\t\t\t\tCard Number\t\t\tFather Name\t\t\tValidity\t\t\tIssuer Organization\t\t\tUser ID");
+		while(rs.next())
+		{
+			System.out.println(rs.getString("GID") + "\t\t\t" + rs.getString("ID_TYPE") + "\t\t\t" + rs.getString("CARD_NUMBER") + "\t\t\t" + rs.getString("FATHER_NAME")
+			 + "\t\t\t" + rs.getDate("VALIDITY") + "\t\t\t" + rs.getString("ISSUER") + "\t\t\t" + rs.getString("USER_ID"));
+		
+			flag = true;
+		}
+		System.out.println("******************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist . ");
+		con.getConnection().close();
 	}
 
 }

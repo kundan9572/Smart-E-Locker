@@ -22,7 +22,9 @@ public class UpdatePage {
 	// ----------------------------------------- USER DETAILS UPDATION ------------------------------------------------
 
 	public static void updateUserDetails() throws NumberFormatException, IOException, ClassNotFoundException, SQLException {
-		
+		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+		System.out.println("\n\n\t\t\t\t\t\t\t\t SMART E-LOCKER \n");
+		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
 		System.out.println("Select what you want to update( userid,first name,last name, date of birth and username cannot be updated ) :\n\n\n ");
 		System.out.println("\t\t 1- Update Password\n\t\t 2- Update Mobile Number\n\t\t 3- Update Email Id\n\t\t 4- Update city\n\t\t"
 				+ " 5- Update State\n\t\t 6- Update Pincode\n\t\t 7- Update Complete address\n\t\t 8- Exit");
@@ -100,7 +102,7 @@ public class UpdatePage {
 		System.out.println("\t\t 1- Update Bank Type\n\t\t 2- Update NetBanking Id\n\t\t 3- Update Password\n\t\t 4- Logout");
 		int choice = Integer.parseInt(br.readLine());
 		
-		User_Bank_Details bank = new User_Bank_Details();
+		Admin_Bank_Details bank = new Admin_Bank_Details();
 		BankDetailsDAO bankdao = new BankDetailsDAO();
 		String id;
 		
@@ -184,7 +186,7 @@ public class UpdatePage {
 				break;
 		
 		case 6: System.out.println("Thanks for updating data .");
-				User_Edu_Data edu = new User_Edu_Data();
+				Admin_Edu_Data edu = new Admin_Edu_Data();
 				edu.eduOp();
 				break;
 		
@@ -234,7 +236,7 @@ public class UpdatePage {
 				break;
 
 		case 5: System.out.println("Thanks for Updating data .");
-				User_Govt_Id gid= new User_Govt_Id();
+				Admin_Govt_Id gid= new Admin_Govt_Id();
 				gid.govtOp();
 				break;
 
@@ -328,7 +330,7 @@ public class UpdatePage {
 		 		insurancedao.updateEndDate(id,edate);
 				break;
 		
-		case 5: User_Insurance_Op user = new User_Insurance_Op();
+		case 5: Admin_Insurance_Op user = new Admin_Insurance_Op();
 				user.insuranceOp();
 				break;
 		

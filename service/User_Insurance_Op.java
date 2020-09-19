@@ -6,21 +6,24 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import dao.EducationDataDAO;
 import dao.UserInsuranceDAO;
-import model.EducationData;
 import model.UserInsurance;
 
 public class User_Insurance_Op {
 
-	public static void insuranceOp() throws NumberFormatException, IOException, ClassNotFoundException, SQLException, ParseException {
+public static void insuranceOp() throws NumberFormatException, IOException, ClassNotFoundException, SQLException, ParseException {
 		
 		while(true) {
 			
 		
 	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
 
-		System.out.println("\n\n\t\t\t\t WELCOME \n\n\n");
+	    System.out.println("\n\n\t\t\t\t\t\t\t\t SMART E-LOCKER \n");
+		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+		System.out.println("\n\n\t\t\t\t\t\t\t\t WELCOME \n\n\n");
+		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+
 		System.out.println("Choose the operation need to performed : \n\n");
 		System.out.println("\t 1-> Insert\n\t 2-> Update\n\t 3-> Delete\n\t 4-> View Details\n\t 5-> Logout");
 		int option = Integer.parseInt(br.readLine());
@@ -47,7 +50,9 @@ public class User_Insurance_Op {
 				insurancedao.delete(id);
 				break;
 		
-		case 4: insurancedao.display();
+		case 4: System.out.println("Enter User Id :");
+				String uid = br.readLine();
+				insurancedao.displayInsurance(uid);
 				break;
 		
 		case 5: System.out.println("Thankyou");

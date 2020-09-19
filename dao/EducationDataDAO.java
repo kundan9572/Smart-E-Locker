@@ -32,27 +32,36 @@ public class EducationDataDAO {
 		st.setString(7, educationdata.getUserId());
 		
 		st.executeUpdate();
+		System.out.println("Data Successfully Inserted .");
 		con.getConnection().close();
 
 
 	}
 
 	public void display() throws ClassNotFoundException, SQLException, IOException {
-		
+		boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
 		
 		ResultSet rs = st.executeQuery("SELECT * FROM EDUCATION_DATA");
-		System.out.println("***************************************************************************************************************************************************************************************");
+		System.out.println("***************************************************************************************************************************************************************************************************************************************************************************************");
 		System.out.println("Education ID\t\tEducation Type\t\tUniversity/Board\t\tRegistration Number\t\tMarks Obtained\t\tDate Of passing\t\tUser ID");
 		while(rs.next())
 		{
 			System.out.println(rs.getString("EID") +"\t\t\t" + rs.getString("EDU_TYPE") + "\t\t\t" + rs.getString("UNIVERSITY_BOARD") +"\t\t\t\t" 
 		+ rs.getString("REGISTRATION_NUM") + "\t\t\t\t" + rs.getInt("MARKS_OBTAINED")+ "%"+ "\t\t"+ rs.getDate("YEAR_OF_PASSING") + "\t\t" + rs.getString("USER_ID") );
+		
+			flag = true;
 		}
-		System.out.println("***************************************************************************************************************************************************************************************");
-
+		System.out.println("*******************************************************************************************************************************************************************************************************************************************************************************************");
+		
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 	}
 
 	
@@ -73,6 +82,7 @@ public class EducationDataDAO {
 			 System.out.println("Error Occured");
 		 }
 
+			con.getConnection().close();
 
 	}
 
@@ -90,6 +100,7 @@ public class EducationDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -106,6 +117,7 @@ public class EducationDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -123,6 +135,7 @@ public class EducationDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -140,6 +153,7 @@ public class EducationDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -157,15 +171,17 @@ public class EducationDataDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
 	public void userEducation() throws ClassNotFoundException, SQLException, IOException {
-		
+		boolean flag = false;
 		Statement st = con.getConnection().createStatement();
 		String sql = "SELECT * FROM USER_DETAILS INNER JOIN EDUCATION_DATA ON USER_DETAILS.ID = EDUCATION_DATA.USER_ID";
 		ResultSet rs=st.executeQuery(sql);
-		
+		System.out.println("***************************************************************************************************************************************************************************************************************************************88**************************************************************************************************************************************************************************************************************");
+
 		while(rs.next())
 		{
 			System.out.println(rs.getString("ID") + "\t" + rs.getString("FNAME") + "\t" + rs.getString("LNAME") + "\t" + rs.getString("USERNAME")
@@ -173,18 +189,58 @@ public class EducationDataDAO {
 			+"\t\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE") 
 			+ rs.getString("EID") +"\t\t\t" + rs.getString("EDU_TYPE") + "\t\t\t" + rs.getString("UNIVERSITY_BOARD") +"\t\t\t" 
 			+ rs.getString("REGISTRATION_NUM") + "\t\t\t" + rs.getInt("MARKS_OBTAINED")+ "%"+ "\t\t\t"+ rs.getDate("YEAR_OF_PASSING") + "\t\t\t" + rs.getString("USER_ID") );
+			
+			flag = true;
 		}
 		
+		System.out.println("**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+		
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public void countEduIDDetails() throws ClassNotFoundException, SQLException, IOException {
+		
+		Statement st = con.getConnection().createStatement();
+		ResultSet rs = st.executeQuery("SELECT COUNT(EID) FROM EDUCATION_DATA");
+		while(rs.next())
+		{
+			int count = rs.getInt(1);
+			System.out.println("\n********************************************************************************\n");
+			System.out.println("The total number of Data  are :" + count);
+			System.out.println("\n********************************************************************************\n");
+
+		}
+		con.getConnection().close();
+
+	}
+
+	public void displayUserEducation(String uid) throws ClassNotFoundException, SQLException, IOException {
+		boolean flag = false;
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM EDUCATION_DATA WHERE USER_ID = '" + uid + "'";
+	//	String sql = "SELECT ID FROM USER_DETAILS";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("***************************************************************************************************************************************************************************************************************************************************************************************");
+		System.out.println("Education ID\t\tEducation Type\t\tUniversity/Board\t\tRegistration Number\t\tMarks Obtained\t\tDate Of passing\t\tUser ID");
+		while(rs.next())
+		{
+			System.out.println(rs.getString("EID") +"\t\t\t" + rs.getString("EDU_TYPE") + "\t\t\t" + rs.getString("UNIVERSITY_BOARD") +"\t\t\t\t" 
+		+ rs.getString("REGISTRATION_NUM") + "\t\t\t\t" + rs.getInt("MARKS_OBTAINED")+ "%"+ "\t\t"+ rs.getDate("YEAR_OF_PASSING") + "\t\t" + rs.getString("USER_ID") );
+		
+			flag = true;
+		}
+		System.out.println("*******************************************************************************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist .");
+		con.getConnection().close();	
+	}
 	
 }

@@ -6,10 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
+import model.LoginUser;
 import model.UserDetails;
+import service.AdminPage;
 import utility.ConnectionManager;
 
 public class UserDetailsDAO {
@@ -50,18 +53,18 @@ public class UserDetailsDAO {
 		st.setLong(11, pincode);
 		
 		st.executeUpdate();
-		
+		System.out.println("Data Successfully Inserted !");
 		con.getConnection().close();
 	}
 
 	public void display() throws SQLException, ClassNotFoundException, IOException {
-		
+		boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
 		
 		ResultSet rs= st.executeQuery("SELECT * FROM USER_DETAILS");
-		System.out.println("***********************************************************************************************************************************************************************************************************************************************");
+		System.out.println("*****************************************************************************************************************************************************************************************************************************************************************************");
 		System.out.println("User ID\t\tFirst Name\tLast Name\tUsername\t\tPassword\t\tDate Of Birth\t\tMobile Number\t\tEmail ID\t\t\tCity\t\t\tState\t\t\tPincoden\n");
 		while(rs.next())
 		{
@@ -69,11 +72,20 @@ public class UserDetailsDAO {
 			System.out.println(rs.getString("ID") + "\t\t" + rs.getString("FNAME") + "\t\t" + rs.getString("LNAME") + "\t\t" + rs.getString("USERNAME")
 			+"\t\t"+rs.getString("PASSWORD") + "\t\t" + rs.getDate("DATE_OF_BIRTH") + "\t\t" + rs.getLong("MOBILE_NUM") + "\t\t" + rs.getString("EMAIL_ID")
 			+"\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE"));	
+		
+			flag = true;
 		}
 		
-		System.out.println("***********************************************************************************************************************************************************************************************************************************************");
+		System.out.println("**************************************************************************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 	}
 
+	
 	public void updatePassword(String id, String password) throws ClassNotFoundException, SQLException, IOException {
 		
 		ConnectionManager con = new ConnectionManager();
@@ -89,7 +101,7 @@ public class UserDetailsDAO {
 		}
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
-
+		con.getConnection().close();
 		
 	}
 
@@ -105,7 +117,7 @@ public class UserDetailsDAO {
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
 
-
+		con.getConnection().close();
 	}
 
 	public void updateEmail(String id, String email) throws ClassNotFoundException, SQLException, IOException {
@@ -120,7 +132,7 @@ public class UserDetailsDAO {
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
 
-		
+		con.getConnection().close();
 	}
 
 	public void updateCity(String id, String city) throws ClassNotFoundException, SQLException, IOException {
@@ -134,7 +146,7 @@ public class UserDetailsDAO {
 		}
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
-
+		con.getConnection().close();
 	}
 
 	public void updateState(String id, String state) throws ClassNotFoundException, SQLException, IOException {
@@ -147,7 +159,7 @@ public class UserDetailsDAO {
 		}
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
-
+		con.getConnection().close();
 	}
 
 	public void updatePinCode(String id, Long pincode) throws ClassNotFoundException, SQLException, IOException {
@@ -160,7 +172,7 @@ public class UserDetailsDAO {
 		}
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
-
+		con.getConnection().close();
 	}
 
 	public void updateAddress(String id, String ncity, String nstate, Long npin) throws ClassNotFoundException, SQLException, IOException {
@@ -178,7 +190,7 @@ public class UserDetailsDAO {
 		}
 		else
 			System.out.println("Update Failed ! \nCheck all the details carefully .");
-
+		con.getConnection().close();
 	}
 
 	public void delete(String id) throws ClassNotFoundException, SQLException, IOException {
@@ -195,7 +207,7 @@ public class UserDetailsDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
-
+			con.getConnection().close();
 	}
 	
 	public boolean validateUserId(String id) throws SQLException, ClassNotFoundException, IOException
@@ -222,22 +234,86 @@ public class UserDetailsDAO {
 
 	public boolean validateUsername(String username) throws ClassNotFoundException, SQLException, IOException {
 		
-Statement st = con.getConnection().createStatement();
+		Statement st = con.getConnection().createStatement();
+		boolean result = false;
 		
 		ResultSet rs= st.executeQuery("SELECT USERNAME FROM USER_DETAILS");
 		
 		while(rs.next())
 		{
-			if(username.equals(rs.getNString("ID")))
+			if(username.equals(rs.getNString("USERNAME")))
 			{	
 				con.getConnection().close();
-				return true;
+				result = true;
 			
 			}
 	
 		}
+	//	con.getConnection().close();
+		return result;
+	}
+
+	public void countUser() throws ClassNotFoundException, SQLException, IOException {
+		Statement st = con.getConnection().createStatement();
+		ResultSet rs = st.executeQuery("SELECT COUNT(ID) FROM USER_DETAILS");
+		while(rs.next())
+		{
+			int count = rs.getInt(1);
+			System.out.println("\n****************************************************************************************************\n");
+			System.out.println("The total number of user are :" + count);
+			System.out.println("\n****************************************************************************************************\n");
+
+		}
+		con.getConnection().close();	
+	}
+
+	public void showUserDetails(String id) throws ClassNotFoundException, SQLException, IOException {
+		boolean flag = false;
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM USER_DETAILS WHERE ID = '"+ id + "'" ;
+		ResultSet rs = st.executeQuery(sql);
+		while(rs.next()) {
+			if(id.equals(rs.getString("USERNAME"))) {
+				
+				System.out.println(rs.getString("ID") + "\t\t" + rs.getString("FNAME") + "\t\t" + rs.getString("LNAME") + "\t\t" + rs.getString("USERNAME")
+				+"\t\t"+rs.getString("PASSWORD") + "\t\t" + rs.getDate("DATE_OF_BIRTH") + "\t\t" + rs.getLong("MOBILE_NUM") + "\t\t" + rs.getString("EMAIL_ID")
+				+"\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE"));	
+			
+			flag = true;
+			}
+			if(flag == true) {
+				System.out.println("Successfully Fetched data");
+			}
+			else
+				System.out.println("User ID does not exist . ");
+			con.getConnection().close();
+		}
+	}
+
+	public void showUser(String userId) throws ClassNotFoundException, SQLException, IOException, NumberFormatException, ParseException {
+		boolean flag = false;
+	//	String uname = userId.getUsername();
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM USER_DETAILS WHERE ID = '" + userId + "'";
+	//	String sql = "SELECT ID FROM USER_DETAILS";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("***********************************************************************************************************************************************************************************************************************************************************");
+		while(rs.next()) {
+				
+			System.out.println(rs.getString("ID") + "\t\t" + rs.getString("FNAME") + "\t\t" + rs.getString("LNAME") + "\t\t" + rs.getString("USERNAME")
+			+"\t\t"+rs.getString("PASSWORD") + "\t\t" + rs.getDate("DATE_OF_BIRTH") + "\t\t" + rs.getLong("MOBILE_NUM") + "\t\t" + rs.getString("EMAIL_ID")
+			+"\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE"));	
+			System.out.println("\n");
+			
+				flag = true;
+			}
+			System.out.println("********************************************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist . ");
 		con.getConnection().close();
-		return false;
 	}
 	
 

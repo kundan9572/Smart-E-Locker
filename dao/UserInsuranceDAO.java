@@ -31,6 +31,7 @@ public class UserInsuranceDAO {
 		st.setString(6, insu.getUserId());
 		
 		st.executeUpdate();
+		System.out.println("Data is successfully Inserted .");
 		con.getConnection().close();
 	}
 
@@ -48,25 +49,32 @@ public class UserInsuranceDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
-
+			con.getConnection().close();
 	}
 
 	public void display() throws SQLException, ClassNotFoundException, IOException {
-			
+			boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
 		
 		ResultSet rs= st.executeQuery("SELECT * FROM USER_INSURANCE");
-		System.out.println("**************************************************************************************************************************************************************");
+		System.out.println("*****************************************************************************************************************************************************************************************************************");
 		System.out.println("Insurance ID\t\tInsurance Type\t\tInsurance Number\t\tInsurance Start Date\t\tInsurance End Date\t\t User Id");
 		while(rs.next())
 		{
 			System.out.println(rs.getString(1) + "\t\t\t" + rs.getString(2) + "\t\t\t" + rs.getString(3) +"\t\t\t"+ rs.getDate(4) + "\t\t\t" + rs.getDate(5)
 			+ "\t\t\t" + rs.getString(6));
+		
+		flag = true;
 		}
-		System.out.println("**************************************************************************************************************************************************************");
-
+		System.out.println("******************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 	}
 
 	public void updateInsuranceType(String id, String type) throws ClassNotFoundException, SQLException, IOException {
@@ -83,7 +91,7 @@ public class UserInsuranceDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
-
+		con.getConnection().close();
 	}
 
 	public void updateInsuranceNumber(String id, String number) throws ClassNotFoundException, SQLException, IOException {
@@ -100,7 +108,7 @@ public class UserInsuranceDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
-
+		con.getConnection().close();
 	}
 
 	public void updateStartDate(String id, LocalDate sdate) throws SQLException, ClassNotFoundException, IOException {
@@ -117,7 +125,7 @@ public class UserInsuranceDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
-
+		con.getConnection().close();
 	}
 
 	public void updateEndDate(String id, LocalDate edate) throws ClassNotFoundException, SQLException, IOException {
@@ -134,7 +142,80 @@ public class UserInsuranceDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
+	}
 
+	public boolean validateInsuranceID(String id) throws ClassNotFoundException, SQLException, IOException {
+		boolean result = false;
+		Statement st = con.getConnection().createStatement();
+		
+		ResultSet rs= st.executeQuery("SELECT ID FROM USER_INSURANCE");
+		
+		while(rs.next())
+		{
+			if(id.equals(rs.getNString("ID")))
+			{	
+				result = true;
+			
+			}
+	
+		}
+		return result;
+	}
+
+	public void displayInsurance(String uid) throws ClassNotFoundException, SQLException, IOException {
+		boolean flag = false;
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM USER_INSURANCE WHERE USER_ID = '" + uid + "'";
+	//	String sql = "SELECT ID FROM USER_DETAILS";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("*****************************************************************************************************************************************************************************************************************");
+		System.out.println("Insurance ID\t\tInsurance Type\t\tInsurance Number\t\tInsurance Start Date\t\tInsurance End Date\t\t User Id");
+		while(rs.next())
+		{
+			System.out.println(rs.getString(1) + "\t\t\t" + rs.getString(2) + "\t\t\t" + rs.getString(3) +"\t\t\t"+ rs.getDate(4) + "\t\t\t" + rs.getDate(5)
+			+ "\t\t\t" + rs.getString(6));
+		flag = true;
+		}
+		System.out.println("******************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist . ");
+		con.getConnection().close();
+	}
+
+	public void userInsurance() throws SQLException, ClassNotFoundException, IOException {
+			
+		boolean flag = false;
+		ConnectionManager con = new ConnectionManager();
+		
+		Statement st = con.getConnection().createStatement();
+		String sql ="SELECT * FROM USER_DETAILS INNER JOIN USER_INSURANCE ON USER_DETAILS.ID = USER_INSURANCE.USER_ID";
+		ResultSet rs= st.executeQuery(sql);
+		System.out.println("***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+		System.out.println("\t\t\t\t User and Insurance Details");
+		System.out.println("\t\t__________________________________________________\n");
+		while(rs.next())
+		{
+			System.out.println(rs.getString("ID") + "\t\t" + rs.getString("FNAME") + "\t\t" + rs.getString("LNAME") + "\t\t" + rs.getString("USERNAME")
+			+"\t\t"+rs.getString("PASSWORD") + "\t\t" + rs.getDate("DATE_OF_BIRTH") + "\t\t" + rs.getLong("MOBILE_NUM") + "\t\t" + rs.getString("EMAIL_ID")
+			+"\t\t" + rs.getString("CITY")+ "\t\t\t" + rs.getString("STATE") + "\t\t\t" + rs.getLong("PIN_CODE") +
+			rs.getString("ID") + "\t\t\t" + rs.getString("INSURANCE_TYPE") + "\t\t\t" + rs.getString("INSURANCE_NUMBER") +"\t\t\t"+ rs.getDate("START_DATE") + "\t\t\t" + rs.getDate("END_DATE")
+			+ "\t\t\t" + rs.getString("USER_ID"));
+		
+		flag = true;
+		}
+		System.out.println("*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist . ");
+		
+		con.getConnection().close();
 	}
 
 }

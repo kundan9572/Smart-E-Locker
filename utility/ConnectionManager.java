@@ -25,9 +25,9 @@ public static Connection getConnection() throws IOException, SQLException, Class
 		
 		con=DriverManager.getConnection(url,username,password);
 		
-		if( con != null) {
-			System.out.println("Connection Established");
-		}
+//		if( con != null) {
+//			System.out.println(" Data Fetch Successfully");
+//		}
 		return con;
 		
 		

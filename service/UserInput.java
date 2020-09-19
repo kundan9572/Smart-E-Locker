@@ -12,6 +12,7 @@ import java.util.Date;
 import dao.BankDetailsDAO;
 import dao.GovernmentDataDAO;
 import dao.UserDetailsDAO;
+import dao.UserInsuranceDAO;
 import model.BankDetails;
 import model.EducationData;
 import model.GovernmentData;
@@ -30,15 +31,22 @@ public class UserInput {
 	static UserDetailsDAO userdao = new UserDetailsDAO();
 	public static UserDetails signUp() throws IOException, ParseException, ClassNotFoundException, SQLException {
 		
-		
+		UserDetails userDetails = null;
 		System.out.println("Enter User ID : ");
 		String id= br.readLine();
+
+	//	boolean checkId = userdao.validateUserId(id);
+	//	if(checkId ==false) {
+			
 		System.out.println("Enter First Name : ");
 		String fname = br.readLine();
 		System.out.println("Enter Last Name : ");
 		String lname = br.readLine();
 		System.out.println("Enter Username : ");
 		String username = br.readLine();
+	//	boolean vuname = userdao.validateUsername(username);
+	//	if ( vuname == false) {
+			
 		System.out.println("Enter Password : ");
 		String password =br.readLine();
 		System.out.println("Enter Date Of Birth(format : yyyy-mm-dd) ");
@@ -51,6 +59,7 @@ public class UserInput {
 		
 		System.out.println("Enter Mobile Number : ");
 		Long mobNum=Long.parseLong(br.readLine());
+		
 		System.out.println("Enter Email Id : ");
 		String email = br.readLine();
 		System.out.println("Enter City : ");
@@ -61,7 +70,7 @@ public class UserInput {
 		Long pincode = Long.parseLong(br.readLine());
 		
 		
-		UserDetails userDetails = new UserDetails();
+		userDetails = new UserDetails();
 		
 		userDetails.setId(id);
 		userDetails.setFirstName(fname);
@@ -74,10 +83,21 @@ public class UserInput {
 		userDetails.setCity(city);
 		userDetails.setState(state);
 		userDetails.setPinCode(pincode);
-		
-
+//		}
+//		else {
+//			System.out.println("Username Already Exist .");
+//			UserInput user = new UserInput();
+//			user.signUp();
+//		}
+//
+//		}
+//		else {
+//			System.out.println("Users with same UID already existed");
+//			UserInput user = new UserInput();
+//			user.signUp();
+//			
+//		}
 		return userDetails;
-		
 	}
 	
 	public static LoginUser loginUser() throws IOException {
@@ -272,10 +292,17 @@ public class UserInput {
 
 	}
 	
-	public static UserInsurance insurance() throws IOException {
+	public static UserInsurance insurance() throws IOException, ClassNotFoundException, SQLException {
+		
+		UserInsurance userInsurance = null;
+		UserInsuranceDAO usr = new UserInsuranceDAO();
 		System.out.println("\t\t\tEnter your Insurance details here\n\n\n");
 		System.out.println("Enter ID : ");
 		String id = br.readLine();
+		boolean validateid = usr.validateInsuranceID(id);
+	//	System.out.println(validateid);
+		if(validateid == false)
+		{
 		System.out.println("Enter Insurance Type(Helth,life,Vehicle or any )");
 		String type = br.readLine();
 		System.out.println("Enter Insurance Number : ");
@@ -286,24 +313,33 @@ public class UserInput {
 		System.out.println("Enter End Date (format: yyyy-mm-dd) : ");
 		String enddate = br.readLine();
 		LocalDate end = LocalDate.parse(enddate);
-		System.out.println("Enter User ID : ");
-		String uid=br.readLine();
-	
-		UserInsurance userInsurance = new UserInsurance();
-		userInsurance.setId(id);
-		userInsurance.setType(type);
-		userInsurance.setNumber(insNum);
-		userInsurance.setStart(start);
-		userInsurance.setEnd(end);
-		userInsurance.setUserId(uid);
+		if(end.compareTo(start) > 0)
+		{
+			System.out.println("Enter User ID : ");
+			String uid=br.readLine();
+			userInsurance = new UserInsurance();
+			userInsurance.setId(id);
+			userInsurance.setType(type);
+			userInsurance.setNumber(insNum);
+			userInsurance.setStart(start);
+			userInsurance.setEnd(end);
+			userInsurance.setUserId(uid);
+		}
+		else {
+			System.out.println("\nEnd date must be date after start date\n");
+			UserInput uinp = new UserInput();
+			uinp.insurance();
+		}
+		}else {
+			System.out.println("Id already existed !\n Try with New ID.");
+			UserInput uinp = new UserInput();
+			uinp.insurance();
+		}
+		
 		
 		return userInsurance;		
 			
 		
 	}
-	
-	
-
-
 
 }

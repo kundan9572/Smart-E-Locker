@@ -6,49 +6,49 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import dao.GovernmentDataDAO;
-import model.GovernmentData;
+import dao.BankDetailsDAO;
+import model.BankDetails;
 
-public class User_Govt_Id {
+public class Admin_Bank_Details {
 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	
-	public static void govtOp() throws NumberFormatException, IOException, ClassNotFoundException, SQLException, ParseException {
+	public static void bankOp() throws NumberFormatException, IOException, ClassNotFoundException, SQLException, ParseException {
 	
 	while(true) {
-		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
-		System.out.println("\n\n\t\t\t\t\t\t\t\t SMART E-LOCKER \n");
-		System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+	System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+	System.out.println("\n\n\t\t\t\t\t\t\t\t SMART E-LOCKER \n");
+	System.out.println("\t\t\t\t\t__________________________________________________________________\n");
 	System.out.println("\n\n\t\t\t\t\t\t\t\t WELCOME \n\n\n");
 	System.out.println("\t\t\t\t\t__________________________________________________________________\n");
+
 	System.out.println("Choose the operation need to performed : \n\n");
 	System.out.println("\t 1-> Insert\n\t 2-> Update\n\t 3-> Delete\n\t 4-> View Details\n\t 5-> Logout");
 	int option = Integer.parseInt(br.readLine());
 	
-	UserPage user = new UserPage();
-	UserInput input = new UserInput();
-	GovernmentDataDAO  governmentDatadao = new GovernmentDataDAO();
-
+	// object to fetch and store the data
 	
+	AdminPage user = new AdminPage();
+	UserInput input = new UserInput();
+	BankDetailsDAO bankDetailsdao = new BankDetailsDAO();
+
 	
 	switch(option)
 	{
-	case 1: GovernmentData gdata = input.governmentData();
-			governmentDatadao.insert(gdata);
+	case 1: BankDetails details = input.bankDetails();
+			bankDetailsdao.insert(details);
 			break;
 	
 	case 2: UpdatePage page = new UpdatePage();
-			page.updateGovernmentData();
+			page.updateBank();
 			break;
 	
-	case 3: System.out.println("Enter the Government ID to delete :");
-			String id= br.readLine();
-			governmentDatadao.delete(id);
+	case 3: System.out.println("Enter the ID you want to delete");
+			String id = br.readLine();
+			bankDetailsdao.delete(id);
 			break;
 	
-	case 4: System.out.println("Enter the user ID :");
-			String uid = br.readLine();
-			governmentDatadao.displayUserGovt(uid);
+	case 4: bankDetailsdao.display();
 			break;
 	
 	case 5: System.out.println("Thankyou");

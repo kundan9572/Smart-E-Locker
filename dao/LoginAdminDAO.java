@@ -23,18 +23,20 @@ public class LoginAdminDAO {
 		{
 			if(admin.getUsername().equals(rs.getString("USERNAME")))
 			{
-				if(admin.getSecretKey().equals("abcd123")) {
-					{
-						con.getConnection().close();
-						return true;
-					}
-					
-				}
+				if(admin.getPassword().equals(rs.getString("PASSWORD")))
+				{
+
+						if(admin.getSecretKey().equals("abcd123")) 
+						{
+							con.getConnection().close();
+							return true;
+						}
+				}	
 			}
 		}
+		
 		con.getConnection().close();
 		return false;
-		
 	}
 
 }

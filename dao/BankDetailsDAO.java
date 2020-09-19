@@ -33,12 +33,14 @@ public class BankDetailsDAO {
 		st.setString(8, bankDetails.getUserId());
 		
 		st.executeUpdate();
+		System.out.println("Data Successfully Inserted .");
 		con.getConnection().close();
 		
 	}
 
 	public void display() throws ClassNotFoundException, SQLException, IOException {
 		
+		boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
@@ -51,9 +53,17 @@ public class BankDetailsDAO {
 		{
 			System.out.println(rs.getString("BID")+"\t\t"+ rs.getString("BANK_NAME")+ "\t\t" + rs.getString("ACCOUNT_NUMBER")+"\t\t" + rs.getString("IFSC_CODE") 
 			+ "\t\t" + rs.getString("BANK_TYPE") + "\t\t" + rs.getString("NET_BANKING_ID")+ "\t\t" + rs.getString("PASSWORD") + "\t\t" + rs.getString("USER_ID"));
+		
+		flag = true;
 		}
 		System.out.println();
 		System.out.println("***************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 
 	}
 
@@ -73,17 +83,18 @@ public class BankDetailsDAO {
 			 System.out.println("Error Occured");
 		 }
 
+			con.getConnection().close();
 
 	}
 
 	public void userBank() throws SQLException, ClassNotFoundException, IOException {
-		
+		boolean flag = false;
 		ConnectionManager con = new ConnectionManager();
 		
 		Statement st = con.getConnection().createStatement();
 		String sql ="SELECT * FROM USER_DETAILS INNER JOIN BANK_DETAILS ON USER_DETAILS.ID = BANK_DETAILS.USER_ID";
 		ResultSet rs= st.executeQuery(sql);
-		System.out.println("**************************************************************************************************************************************************************************************************************************************************************************************************");
+		System.out.println("*******************************************************************************************************************************************************************************************************************************************************************************************************************************************");
 		while(rs.next())
 		{
 			
@@ -92,11 +103,17 @@ public class BankDetailsDAO {
 			+"\t" + rs.getString("CITY")+ "\t" + rs.getString("STATE") + "\t" + rs.getLong("PIN_CODE") + "\t" +
 			rs.getString("BID")+"\t"+ rs.getString("BANK_NAME")+ "\t" + rs.getString("ACCOUNT_NUMBER")+"\t" + rs.getString("IFSC_CODE") 
 			+ "\t" + rs.getString("BANK_TYPE") + "\t" + rs.getString("NET_BANKING_ID")+ "\t" + rs.getString("PASSWORD") + "\t" + rs.getString("USER_ID")
-					);	
 			
-			
+			);	
+			flag = true;
 		}
-		System.out.println("**************************************************************************************************************************************************************************************************************************************************************************************************");
+		System.out.println("*********************************************************************************************************************************************************************************************************************************************************************************************************************************************");
+		if(flag == true) {
+			System.out.println("Successfully Fetched data");
+		}
+		else
+			System.out.println("User ID does not exist . ");
+		con.getConnection().close();
 
 	}
 
@@ -116,6 +133,7 @@ public class BankDetailsDAO {
 			 System.out.println("Error Occured");
 		 }
 
+		con.getConnection().close();
 
 	}
 
@@ -133,6 +151,7 @@ public class BankDetailsDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
 
@@ -150,7 +169,50 @@ public class BankDetailsDAO {
 		 else {
 			 System.out.println("Error Occured");
 		 }
+		con.getConnection().close();
 
 	}
-    
+
+	public void countBankID() throws ClassNotFoundException, SQLException, IOException {
+		Statement st = con.getConnection().createStatement();
+		ResultSet rs = st.executeQuery("SELECT COUNT(BID) FROM BANK_DETAILS");
+		while(rs.next())
+		{
+			int count = rs.getInt(1);
+			System.out.println("\n************************************************************************************\n");
+			System.out.println("The total number of Bank Id are :" + count);
+			System.out.println("\n************************************************************************************\n");
+
+		}
+		con.getConnection().close();
+
+		
+	}
+
+	public void displayUserBank(String uid) throws ClassNotFoundException, SQLException, IOException {
+		
+		boolean flag= false;
+		Statement st = con.getConnection().createStatement();
+		String sql = "SELECT * FROM BANK_DETAILS WHERE USER_ID = '" + uid + "'";
+	//	String sql = "SELECT * FROM BANK_DETAILS";
+		ResultSet rs = st.executeQuery(sql);
+		System.out.println("**************************************************************************************************************************************************************************");
+		System.out.println("Bank Id\t\tBank Name\t\t\tAccount Number\t\tIFSC Code\t\tBank Type\tNetBanking Username\tPassword\t\tUserId\n");
+		while(rs.next()) {
+									
+			System.out.println(rs.getString("BID")+"\t\t"+ rs.getString("BANK_NAME")+ "\t\t" + rs.getString("ACCOUNT_NUMBER")+"\t\t" + rs.getString("IFSC_CODE") 
+			+ "\t\t" + rs.getString("BANK_TYPE") + "\t\t" + rs.getString("NET_BANKING_ID")+ "\t\t" + rs.getString("PASSWORD") + "\t\t" + rs.getString("USER_ID"));
+				flag = true;
+			}
+		if(flag == true) {
+			System.out.println("Successfully fetched data");
+		}
+		else
+			System.out.println("User does not have any data or user does not exist .");
+		System.out.println("**************************************************************************************************************************************************************************");
+
+		
+	}
+	
+	    
 }
